@@ -584,7 +584,7 @@ void Enlarge (){
     unsigned char enlargedImage[SIZE][SIZE];
     memcpy(enlargedImage, image, SIZE * SIZE * sizeof(unsigned char));
 
-
+    // Prompt the user to choose a quarter of the image to enlarge.
     int quarterSize = SIZE / 2;
     int quarterRow, quarterCol;
 
@@ -597,6 +597,7 @@ void Enlarge (){
     int choice;
     cin >> choice;
 
+    // Depending on the user's choice, perform quarter enlargement.
     if(choice == 1)
     {
         quarterRow = 0;
@@ -605,6 +606,7 @@ void Enlarge (){
         {
             for (int j = quarterCol; j < quarterCol + quarterSize; j++)
             {
+                 // Enlarge the selected quarter by duplicating each pixel in a 2x2 block.
                 enlargedImage[2 * i][2 * j] = image[i][j];
                 enlargedImage[2 * i][2 * j + 1] = image[i][j];
                 enlargedImage[2 * i + 1][2 * j] = image[i][j];
@@ -612,7 +614,7 @@ void Enlarge (){
             }
         }
 
-
+        // Copy the enlarged quarter back to the 'image' array.
         for (int i = 0; i < SIZE; i++)
         {
             for (int j = 0; j < SIZE; j++)
@@ -621,6 +623,7 @@ void Enlarge (){
             }
         }
     }
+     // Similar logic for other quarters...
     else if(choice == 2)
     {
         quarterRow = 0;
@@ -647,6 +650,7 @@ void Enlarge (){
             }
         }
     }
+    // Similar logic for other quarters...
     else if(choice == 3)
     {
         quarterRow = quarterSize;
@@ -673,6 +677,7 @@ void Enlarge (){
             }
         }
     }
+    // Similar logic for other quarters...
     else if(choice == 4)
     {
         quarterRow = quarterSize;
@@ -702,6 +707,7 @@ void Enlarge (){
             }
         }
     }
+    // Handle an invalid choice.
     else
     {
         cout << "Invalid choice" << endl;
@@ -730,6 +736,7 @@ void Shrink () {
 
     cin >> The_Chosen_Number;
 
+    // Initialize the 'outputImage' array with all pixel values set to 255 (white).
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
 
@@ -739,6 +746,7 @@ void Shrink () {
 
     }
 
+    // Check the user's choice and apply the corresponding reduction ratio.
     if (The_Chosen_Number == 1)
     {
 
@@ -746,6 +754,7 @@ void Shrink () {
         int newWidth = SIZE / reduction_ratio;
         int newHeight = SIZE / reduction_ratio;
 
+        // Loop through the new dimensions and calculate the average of the pixel values in the original image.
         for (int i = 0; i < newHeight; i++)
         {
             for (int j = 0; j < newWidth; j++)
@@ -763,6 +772,7 @@ void Shrink () {
                     }
                 }
 
+                 // Set the corresponding pixel in 'outputImage' to the average value.
                 outputImage[i][j] = sum / (reduction_ratio * reduction_ratio);
 
             }
@@ -771,6 +781,8 @@ void Shrink () {
         saveImage3();
         menu();
     }
+        
+    // Similar logic for reduction ratio 1/3...
     else if (The_Chosen_Number == 2)
     {
 
@@ -803,6 +815,7 @@ void Shrink () {
         saveImage3();
         menu();
     }
+    // Similar logic for reduction ratio 1/4...
     else if (The_Chosen_Number == 3)
     {
 
@@ -835,6 +848,7 @@ void Shrink () {
         saveImage3();
         menu();
     }
+    // Go back to the main menu.
     else if (The_Chosen_Number == 0)
     {
 
@@ -863,7 +877,9 @@ void Mirror_Half(){
          << "4 - Mirror Image Lower\n";
     cin>>choice;
 
+    // Check the user's choice and perform the corresponding mirror operation on the image.
     if (choice=='1'){
+        // Mirror Image Left: For each row, reverse the pixel values from the middle to the left.
         for (int i = 0; i < SIZE; i++) {
             int x=1;
             for (int j = SIZE/2; j< SIZE; j++) {
@@ -873,6 +889,7 @@ void Mirror_Half(){
         }
     }
     else if (choice=='2'){
+        // Mirror Image Right: For each row, reverse the pixel values from the middle to the right.
         for (int i = 0; i < SIZE; ++i) {
             int x=255;
             for (int j = 0; j < SIZE/2; ++j) {
@@ -882,6 +899,7 @@ void Mirror_Half(){
         }
     }
     else if (choice=='3'){
+        // Mirror Image Upper: For each column, reverse the pixel values from the middle to the top.
         for (int i = 0; i < SIZE; i++) {
             int x=1;
             for (int j = SIZE/2; j< SIZE; j++) {
@@ -891,6 +909,7 @@ void Mirror_Half(){
         }
     }
     else{
+        // Mirror Image Lower: For each column, reverse the pixel values from the middle to the bottom.
         for (int i = 0; i < SIZE; ++i) {
             int x=255;
             for (int j = 0; j < SIZE/2; ++j) {
@@ -917,26 +936,30 @@ void Shuffle (){
         cin >> order[i];
     }
 
+    // Loop through the entire image to rearrange the quarters based on the user's order.
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             int quarter;
+            // Determine the current quarter based on the row and column indices.
             if (i < SIZE / 2) {
                 if (j < SIZE / 2) {
-                    quarter = order[0];
+                    quarter = order[0];// Top-Left quarter
                 } else {
-                    quarter = order[1];
+                    quarter = order[1];// Top-Right quarter
                 }
             } else {
                 if (j < SIZE / 2) {
-                    quarter = order[2];
+                    quarter = order[2];// Bottom-Left quarter
                 } else {
-                    quarter = order[3];
+                    quarter = order[3];// Bottom-Right quarter
                 }
             }
 
+            // Calculate the row and column offsets to rearrange the pixels.
             int rowOffset = (i % (SIZE / 2)) + ((quarter - 1) / 2) * (SIZE / 2);
             int colOffset = (j % (SIZE / 2)) + ((quarter - 1) % 2) * (SIZE / 2);
 
+            // Update the current pixel in the 'image' array with the corresponding pixel from 'temp'.
             image[i][j] = temp[rowOffset][colOffset];
         }
     }
@@ -948,24 +971,29 @@ void Blur (){
 
     unsigned char imageBLUR[SIZE][SIZE];
 
+    // Loop through the image (excluding the border pixels, i.e., from 1 to SIZE-1).
     for (int i = 1; i < SIZE ; i++)
     {
         for (int j = 1; j < SIZE ; j++)
         {
             int sum = 0;
 
+             // Nested loops to iterate over a 3x3 neighborhood centered at (i, j).
             for (int m = -1; m <= 1; m++)
             {
                 for (int n = -1; n <= 1; n++)
                 {
+                    // Sum the pixel values of the surrounding pixels.
                     sum += image[i + m][j + n];
                 }
             }
 
-            imageBLUR[i][j] = sum / 15;
+            // Calculate the average of the summed pixel values and store it in 'imageBLUR'.
+            imageBLUR[i][j] = sum / 9; // Dividing by 9 as there are 9 pixels in the 3x3 neighborhood.
         }
     }
 
+    // Copy the values from 'imageBLUR' back to the original 'image' array.
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
@@ -990,11 +1018,13 @@ void Crop (){
             image2[i][j]=255;
         }
     }
+    // Copy the specified region from the original 'image' to 'image2'.
     for (int i = x; i < l; ++i) {
         for (int j = y; j < w; ++j) {
             image2[i][j]=image[i][j];
         }
     }
+    // Copy the modified 'image2' back to the original 'image'.
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             image[i][j]=image2[i][j];
